@@ -7,14 +7,11 @@ variable "domain_name" {
 variable "subnet_id" {
   description = "Subnet ID for the SageMaker domain"
   type        = string
-  default     = "subnet-0b3b3b3b3b3b3b3b3"
 }
 
 variable "vpc_id" {
   description = "VPC ID for the SageMaker domain"
   type        = string
-  default     = "vpc-0a0a0a0a0a0a0a0a0"
-  
 }
 variable "nameprefix" {
   description = "Prefix to use for some resource names to avoid duplicates"

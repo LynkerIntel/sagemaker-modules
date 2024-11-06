@@ -1,11 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.47"
-    }
-  }
-}
 
 resource "aws_security_group" "sagemaker_sg" {
   name        = "sagemaker_sg"
