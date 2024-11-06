@@ -52,19 +52,8 @@ jobs:
           #echo $(basename $dir) "|" $dir
         done
 
-    # - name: Create GitHub Release
-    #   id: create_release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     VERSION: ${{ steps.create-version.outputs.version }}
-    #   with:
-    #     tag_name: ${VERSION}
-    #     release_name: Release ${{ github.ref }} as ${VERSION}
-    #     draft: false
-    #     prerelease: false
-
-    - run: |
+    - name: Create release and upload assets
+      run: |
         set -x
         assets=()
         for asset in ./release/*.zip; do
@@ -76,13 +65,3 @@ jobs:
       env:
         VERSION: ${{ steps.create-version.outputs.version }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    # - name: Upload Release Assets
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: ./release/modules.zip
-    #     asset_name: terraform-modules.zip
-    #     asset_content_type: application/zip
