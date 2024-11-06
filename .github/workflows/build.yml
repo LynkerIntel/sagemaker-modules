@@ -48,8 +48,7 @@ jobs:
         mkdir -p release
         for dir in modules/*
         do
-          zip -r release/$(basename $dir).zip $dir
-          #echo $(basename $dir) "|" $dir
+          zip -r release/$(basename $dir)-${VERSION}.zip $dir
         done
 
     - name: Create release and upload assets
@@ -59,7 +58,6 @@ jobs:
         for asset in ./release/*.zip; do
           assets+=("$asset")
         done
-        echo "Assets list is ${assets[@]}"
         gh release create -t "Release ${VERSION}" ${VERSION}
         gh release upload ${VERSION} ${assets[@]}
       env:
