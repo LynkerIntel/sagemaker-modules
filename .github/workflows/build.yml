@@ -56,8 +56,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         VERSION: ${{ steps.create-version.outputs.version }}
       with:
-        tag_name: $VERSION
-        release_name: Release ${{ github.ref }} as $VERSION
+        tag_name: ${VERSION}
+        release_name: Release ${{ github.ref }} as ${VERSION}
         draft: false
         prerelease: false
 
