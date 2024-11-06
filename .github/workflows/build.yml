@@ -47,8 +47,8 @@ jobs:
       run: |
         mkdir -p release
         for dir in modules/* do
-          #zip -r release/$(basename $dir).zip $dir
-          echo $(basename $dir) "|" $dir
+          zip -r release/$(basename $dir).zip $dir
+          #echo $(basename $dir) "|" $dir
         done
 
     # - name: Create GitHub Release
