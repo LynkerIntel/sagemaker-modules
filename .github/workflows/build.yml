@@ -36,17 +36,19 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    - name: Initialize Terraform
-      run: terraform init
-
     - name: Validate Terraform
-      run: terraform validate
+      run: |
+        cd test
+        terraform init
+        terraform validate
+        cd ..
 
     - name: Package Terraform modules
       run: |
         mkdir -p release
-        for dir in $(find . -type d -name 'modules'); do
-          zip -r release/modules.zip $dir
+        for dir in modules/* do
+          #zip -r release/$(basename $dir).zip $dir
+          echo $(basename $dir) "|" $dir
         done
 
     - name: Create GitHub Release
@@ -61,12 +63,23 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Release Assets
-      uses: actions/upload-release-asset@v1
+    - run: |
+        set -x
+        assets=()
+        for asset in ./release/*.zip; do
+          assets+=("-a" "$asset")
+        done
+        hub release create "${assets[@]}" -m "Release ${{ github.ref }} as ${VERSION}" "${VERSION}"
       env:
+        VERSION: ${{ steps.create-version.outputs.version }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./release/modules.zip
-        asset_name: terraform-modules.zip
-        asset_content_type: application/zip
+
+    # - name: Upload Release Assets
+    #   uses: actions/upload-release-asset@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #     asset_path: ./release/modules.zip
+    #     asset_name: terraform-modules.zip
+    #     asset_content_type: application/zip
