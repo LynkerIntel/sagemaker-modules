@@ -51,17 +51,17 @@ jobs:
           echo $(basename $dir) "|" $dir
         done
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: ${{ steps.create-version.outputs.version }}
-      with:
-        tag_name: ${VERSION}
-        release_name: Release ${{ github.ref }} as ${VERSION}
-        draft: false
-        prerelease: false
+    # - name: Create GitHub Release
+    #   id: create_release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     VERSION: ${{ steps.create-version.outputs.version }}
+    #   with:
+    #     tag_name: ${VERSION}
+    #     release_name: Release ${{ github.ref }} as ${VERSION}
+    #     draft: false
+    #     prerelease: false
 
     - run: |
         set -x
