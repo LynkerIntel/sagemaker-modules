@@ -68,11 +68,12 @@ jobs:
         set -x
         assets=()
         for asset in ./release/*.zip; do
-          assets+=("-a" "$asset")
+          assets+=("$asset")
         done
         echo "Assets list is ${assets[@]}"
         echo "Github Ref is ${{ github.ref }}"
-        hub release create "${assets[@]}" -m "Release ${{ github.ref }} as ${VERSION}" "${VERSION}"
+        gh release create -t "Release ${{ github.ref }} as ${VERSION}" ${VERSION}
+        gh release upload ${VERSION} ${assets[@]}
       env:
         VERSION: ${{ steps.create-version.outputs.version }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
