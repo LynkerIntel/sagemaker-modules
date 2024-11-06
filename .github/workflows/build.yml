@@ -48,8 +48,9 @@ jobs:
         VERSION: ${{ steps.create-version.outputs.version }}
       run: |
         mkdir -p release
-        cd release
+        pushd release
         export RELEASES=$(pwd)
+        popd
         for dir in modules/*
         do
           pushd $dir
