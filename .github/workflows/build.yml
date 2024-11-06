@@ -70,6 +70,8 @@ jobs:
         for asset in ./release/*.zip; do
           assets+=("-a" "$asset")
         done
+        echo "Assets list is ${assets[@]}"
+        echo "Github Ref is ${{ github.ref }}"
         hub release create "${assets[@]}" -m "Release ${{ github.ref }} as ${VERSION}" "${VERSION}"
       env:
         VERSION: ${{ steps.create-version.outputs.version }}
