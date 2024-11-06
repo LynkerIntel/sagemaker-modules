@@ -50,7 +50,7 @@ jobs:
         mkdir -p release
         for dir in modules/*
         do
-          zip -r release/$(basename $dir)-${VERSION}.zip $dir
+          zip -r release/$(basename $dir).zip $dir
         done
 
     - name: Create release and upload assets
