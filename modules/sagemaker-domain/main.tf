@@ -7,10 +7,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-west-2"
-}
-
 resource "aws_security_group" "sagemaker_sg" {
   name        = "sagemaker_sg"
   description = "Security group for SageMaker domain"
