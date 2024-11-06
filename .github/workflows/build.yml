@@ -71,8 +71,7 @@ jobs:
           assets+=("$asset")
         done
         echo "Assets list is ${assets[@]}"
-        echo "Github Ref is ${{ github.ref }}"
-        gh release create -t "Release ${{ github.ref }} as ${VERSION}" ${VERSION}
+        gh release create -t "Release ${VERSION}" ${VERSION}
         gh release upload ${VERSION} ${assets[@]}
       env:
         VERSION: ${{ steps.create-version.outputs.version }}
