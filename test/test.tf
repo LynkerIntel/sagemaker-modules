@@ -4,6 +4,8 @@ provider "aws" {
 
 module "sagemaker_domain" {
   source = "../modules/sagemaker-domain"
+  vpc_id = "vpc-12345678"
+  subnet_id=    "subnet-12345678"
 
   # Add any required variables for the sagemaker_domain module here
   # For example:
