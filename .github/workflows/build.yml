@@ -46,7 +46,8 @@ jobs:
     - name: Package Terraform modules
       run: |
         mkdir -p release
-        for dir in modules/* do
+        for dir in modules/*
+        do
           zip -r release/$(basename $dir).zip $dir
           #echo $(basename $dir) "|" $dir
         done
