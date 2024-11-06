@@ -48,9 +48,13 @@ jobs:
         VERSION: ${{ steps.create-version.outputs.version }}
       run: |
         mkdir -p release
+        cd release
+        export RELEASES=$(pwd)
         for dir in modules/*
         do
-          zip -r release/$(basename $dir).zip $dir
+          pushd $dir
+          zip -r ${RELEASES}/$(basename $dir).zip .
+          popd
         done
 
     - name: Create release and upload assets
