@@ -44,6 +44,8 @@ jobs:
         cd ..
 
     - name: Package Terraform modules
+      env:
+        VERSION: ${{ steps.create-version.outputs.version }}
       run: |
         mkdir -p release
         for dir in modules/*
