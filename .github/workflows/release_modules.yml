@@ -1,0 +1,71 @@
+name: Release Terraform Modules
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - id: create-version
+      uses: paulhatch/semantic-version@v5.4.0
+      with:
+        # The prefix to use to identify tags
+        tag_prefix: "v"
+        # A string which, if present in a git commit, indicates that a change represents a
+        # major (breaking) change, supports regular expressions wrapped with '/'
+        major_pattern: "(MAJOR)"
+        # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
+        minor_pattern: "(MINOR)"
+        # A string to determine the format of the version output
+        version_format: "${major}.${minor}.${patch}"
+        # Prevents pre-v1.0.0 version from automatically incrementing the major version.
+        # If enabled, when the major version is 0, major releases will be treated as minor and minor as patch. Note that the version_type output is unchanged.
+        enable_prerelease_mode: true
+        # If enabled, diagnostic information will be added to the action output.
+        debug: false
+        # If true, the branch will be used to select the maximum version.
+        version_from_branch: false
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Initialize Terraform
+      run: terraform init
+
+    - name: Validate Terraform
+      run: terraform validate
+
+    - name: Package Terraform modules
+      run: |
+        mkdir -p release
+        for dir in $(find . -type d -name 'modules'); do
+          zip -r release/$(basename $dir).zip $dir
+        done
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release
+        asset_name: terraform-modules.zip
+        asset_content_type: application/zip
